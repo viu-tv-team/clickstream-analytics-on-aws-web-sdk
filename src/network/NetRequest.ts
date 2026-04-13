@@ -36,8 +36,8 @@ export class NetRequest {
 		const timeoutId = setTimeout(() => {
 			controller.abort();
 		}, timeout);
-		const inputSizeInBytes = new Blob([eventsJson]).size;
-		const isKeepAlive = inputSizeInBytes < NetRequest.KEEP_ALIVE_SIZE_LIMIT;
+		// const inputSizeInBytes = new Blob([eventsJson]).size;
+		// const isKeepAlive = inputSizeInBytes < NetRequest.KEEP_ALIVE_SIZE_LIMIT;
 		const requestOptions: RequestInit = {
 			method: 'POST',
 			mode: 'cors',
@@ -48,7 +48,11 @@ export class NetRequest {
 			},
 			credentials: 'include',
 			body: eventsJson,
-			keepalive: isKeepAlive,
+			/**
+			 * incompatibility with pre-requests was observed on some TV devices; the browser directly interrupted the request without sending it.
+			 * Affected devices: (Samsung 2020, LG TV 2020, LG TV 2021).
+			 */
+			// keepalive: isKeepAlive,
 		};
 		requestOptions.signal = controller.signal;
 

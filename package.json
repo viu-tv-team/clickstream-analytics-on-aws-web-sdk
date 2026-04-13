@@ -1,6 +1,7 @@
 {
   "name": "@aws/clickstream-web",
   "version": "0.12.6",
+  "viu-version": "0.1.0",
   "description": "ClickstreamAnalytics Web SDK",
   "license": "Apache-2.0",
   "main": "./lib/index.js",
@@ -37,6 +38,10 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/plugin-transform-arrow-functions": "^7.23.0",
+    "@babel/plugin-transform-block-scoping": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
     "@fetch-mock/jest": "^0.2.3",
     "@types/jest": "^29.5.14",
     "@types/jsdom": "^21.1.1",
@@ -63,5 +68,15 @@
   ],
   "engines": {
     "node": ">=20.16.0"
-  }
+  },
+  "browserslist": [
+    "Chrome >= 38",
+    "last 3 Firefox version",
+    "last 3 Opera version",
+    "last 3 Edge version",
+    "Safari >= 11",
+    "ios_saf >= 11",
+    "not dead",
+    "not OperaMini all"
+  ]
 }
