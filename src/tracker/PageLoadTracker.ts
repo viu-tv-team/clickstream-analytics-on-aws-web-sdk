@@ -6,15 +6,39 @@ import { Event } from '../provider';
 import { ClickstreamAttribute } from '../types';
 
 export class PageLoadTracker extends BaseTracker {
-	observer: PerformanceObserver;
+	observer: PerformanceObserver | undefined;
 
 	init() {
 		this.trackPageLoad = this.trackPageLoad.bind(this);
 		if (this.isSupportedEnv()) {
+			/**
+			 * The original code is commented out and is incompatible with older browsers.
 			this.observer = new PerformanceObserver(() => {
 				this.trackPageLoad();
 			});
 			this.observer.observe({ entryTypes: ['navigation'] });
+			*/
+
+			if (typeof PerformanceObserver !== 'undefined' &&
+				PerformanceObserver.supportedEntryTypes !== undefined) {
+
+				this.observer = new PerformanceObserver(() => {
+					this.trackPageLoad();
+				});
+
+				try {
+					this.observer.observe({
+						type: 'navigation',
+						buffered: true
+					});
+				} catch (error) {
+					console.error('PerformanceObserver observe failed:', error);
+					this.trackPageLoad();
+				}
+			} else {
+				console.warn('PerformanceObserver not fully supported, using fallback');
+				this.trackPageLoad();
+			}
 		}
 		if (this.isPageLoaded()) {
 			this.trackPageLoad();
@@ -52,6 +76,6 @@ export class PageLoadTracker extends BaseTracker {
 	}
 
 	isSupportedEnv(): boolean {
-		return !!performance && !!PerformanceObserver;
+		return !!performance && typeof PerformanceObserver !== 'undefined';
 	}
 }
